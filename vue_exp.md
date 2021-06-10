@@ -13,44 +13,28 @@
 __项目结构不尽相同，整体上应该差不多。__  
   
 ```
-> ├── node_modules  
-> ├── public  
-> │   ├── index.html  
-> │   └── server.js  
-> ├── src  
-> │   ├── api  
-> │   │   └── index.js  
-> │   ├── assets  
-> │   ├── components  
-> │   │   ├── request.js  
-> │   │   ├── index.js  
-> │   │   └── template  
-> │   │        └── ...  
-> │   ├── router  
-> │   ├── store  
-> │   ├── views  
-> │   ├── App.vue  
-> │   └── main.js  
-> ├── package.json  
-> ├── package-lock.json  
-> └── vue.config.js  
+├── node_modules             //依赖文件夹，由npm下载。如果没有修改只要存在本地，不用上传服务器  
+├── public  
+│   ├── index.html          //入口文件，可以在这里引用js或初始化css  
+│   └── server.js           //用来配置服务器域名，方便修改生产或开发环境地址  
+├── src  
+│   ├── api  
+│   │   └── index.js       //全局配置接口地址  
+│   ├── assets              //资源文件夹  
+│   ├── components  
+│   │   ├── request.js     //封装axios  
+│   │   ├── index.js       //公共js  
+│   │   └── template       //存放各组件文件（夹）  
+│   │        └── ...  
+│   ├── router
+│   ├── store
+│   ├── views               //项目文件目录  
+│   ├── App.vue             //vue入口文件，在这里处理路由缓存、储存全局参数等  
+│   └── main.js             //初始化文件，全局依赖引用、配置  
+├── package.json             //包管理和配置  
+├── package-lock.json  
+└── vue.config.js            //vue配置文件  
 ```
-
-[node_modules]: 依赖文件夹，由npm下载。如果没有修改只要存在本地，不用上传服务器
-[index.html]: 入口文件，可以在这里引用js或初始化css
-[server.js]: 用来配置服务器域名，方便修改生产或开发环境地址
-[index.js]: 全局配置接口地址
-[assets]: 资源文件夹
-[request.js]: 封装axios
-[index.js]: 公共js
-[template]: 各组件文件（夹）
-[router]: 路由
-[store]: vuex
-[views]: 项目文件
-[App.vue]: vue入口文件，在这里处理路由缓存、储存全局参数等
-[main.js]: 初始化文件，全局依赖引用、配置
-[package.json]: 项目包管理和配置
-[vue.config.js]: vue配置文件
   
 ### 解析
 - public
