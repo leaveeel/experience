@@ -6,7 +6,7 @@
   
 ## 创建  
   
-一般来说使用初始/配置package.json和vue.config.js文件，在目录内执行`npm install`。ui框架方面移动端使用<kbd>vant</kbd>，pc端使用<kbd>elementui</kbd>。  
+一般来说使用初始/配置package.json和vue.config.js文件，在目录内执行`npm install`。ui框架方面移动端使用 <kbd>vant</kbd> ，pc端使用 <kbd>elementui</kbd> 。  
   
 ### 结构  
   
@@ -22,9 +22,9 @@ __项目结构不尽相同，整体上应该差不多。__
 │   │   └── index.js       //全局配置接口地址  
 │   ├── assets              //资源文件夹  
 │   ├── components  
-│   │   ├── request.js     //封装axios  
-│   │   ├── index.js       //公共js  
-│   │   └── template       //存放各组件文件（夹）  
+│   │   ├── request.js     //封装axios
+│   │   ├── index.js       //公共js
+│   │   └── template       //存放各组件文件（夹）
 │   │        └── ...  
 │   ├── router
 │   ├── store
@@ -39,10 +39,8 @@ __项目结构不尽相同，整体上应该差不多。__
 ### 解析
 - public
     - index.html
-        - 基本的html文件，在这引用<kbd>server.js</kbd>给api使用，`<%= BASE_URL %>`为资源目录，由vue.config.js配置，默认为`/`。
+        - 基本的html文件，在这引用 <kbd>server.js</kbd> 给api使用，`<%= BASE_URL %>`为资源目录，由vue.config.js配置，默认为`/`。
         - 引用css或者在`<style />`里初始化样式
         - 移动端设置rem单位，可引用js或在`<script />`标签设置
     - server.js
-        - 配置window全局变量，用来修改服务器地址或者公共配置如移动端的<kbd>vConfig</kbd>显示隐藏
-
-
+        - 配置window全局变量，用来修改服务器地址或者公共配置
