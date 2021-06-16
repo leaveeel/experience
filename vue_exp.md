@@ -88,6 +88,27 @@ let {k1, ...o2} = o1
 //k1 = 1
 ```
 12. `this.$forceUpdate()`刷新当前页面，通常重新请求接口刷新数据
+13. `css`的`var()`属性可以动态设置样式，<kbd>vue</kbd>中给节点添加相应的样式值后在`css`中调用。
+```
+<template>
+    <div :style="{'--width': width}"></div>
+</template>
+<script>
+export default {
+    name: "App",
+    data() {
+        return {
+            width: "100px"
+        }
+    },
+}
+</script>
+<style lang="scss">
+div {
+    width: var(--width);
+}
+</style>
+```
 
 
 ### 常用方法
