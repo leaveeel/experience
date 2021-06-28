@@ -159,14 +159,27 @@ Date.prototype.Format = function (fmt) {
   
 3. 根据对象数组中某个字段排序
   
-> `arr.sort(sortRule('key'[, true]))`
+> `arr.sort(sortRule('key'[, lang = String('zh'|''), true|false]))`，通过`lang = zh`对中文排序，倒序设置`des = true`
   
 ```javascript
-function sortRule(x, des) {
-    return (m, n) => {
-        let a = m[x]
-        let b = n[x]
-        return des ? (b - a) : (a - b)
+function sortRule(key, lang, des) {
+    return function(m, n) {
+        if(lang == 'zh') {
+            return des ? m[key].localeCompare(n[key]) * -1 : m[key].localeCompare(n[key])
+        }
+        let a = Number(m[key]) ? Number(m[key]) : (m[key] === 0 || m[key] === '0' ? 0 : des ? -9999999999 : 9999999999)
+        let b = Number(n[key]) ? Number(n[key]) : (n[key] === 0 || n[key] === '0' ? 0 : des ? -9999999999 : 9999999999)
+        if(!isNaN(a) && !isNaN(b)) {
+            return des ? (b - a) : (a - b)
+        }else {
+            if (m[key] < n[key] ) {
+                return -1
+            }
+            if (m[key] > n[key] ) {
+                return 1
+            }
+            return 0
+        }
     }
 }
 ```
