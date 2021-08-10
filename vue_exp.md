@@ -261,3 +261,127 @@ link.click()
 document.body.removeChild(link)
 window.URL.revokeObjectURL(link.href)
 ```
+
+8. 动态规划
+> 由接口获取多级菜单列表，通过瀑布流展示使高度差最小。
+> 问题分解为：将一个包含`m`个元素的数组分成`n`个数组，使每个数组的子元素数量尽量接近
+> this.menu是获取到的数据，结构为：[{..., servers: [{..., menus: [{}, ...]}]}, ...]
+
+
+```javascript
+const that = this
+this.menu.map((item, ind) => {
+    //创建新数组，如果直接用menuLine[0][0]会报undefined错
+    that.menuLine[ind] = []
+
+    let arr = item.servers
+    //储存每个menus数组内元素的数量和对应index，方便计算高度
+    let numList = []
+
+    //储存每列数据
+    let sortList = []
+
+    //判断servers数量是否大于列数，如果小于则平铺
+    if(arr.length > that.lineLen) {
+        that.menuLine[ind] = new Array(that.lineLen)
+        arr.map((menu, index) => {
+            //因为要展示父级的分类名，所以每个len加1
+            numList.push({len: menu.menus.length + 1, index})
+
+        })
+        //根据len值倒序排序，sortRule方法
+        numList = numList.sort(that.sortRule('len', '', true))
+
+        //计算总数和平均数，lineLen为列数
+        let sum = numList.reduce((p, n) => p + n.len, 0)
+        let avg = sum / that.lineLen
+
+        //根据列数循环
+        for(let a = 0; a < that.lineLen; a++) {
+
+            //新建a列
+            sortList[a] = []
+
+            //平均数和当前列已存数量的差值
+            let delta = 0
+
+            //最后一列加入剩下的全部元素
+            if(a == 5) {
+                sortList[a] = numList
+            }
+
+            //储存暂时存放的元素index
+            let setInd = []
+
+            for(let num in numList) {
+                if(numList[num].len >= avg) {
+                    //数量大于平均数将该元素设为a列，删除该元素，重新计算总数和剩下列数的平均数。跳出numList循环，执行下一个lineLen循环
+                    sortList[a].push(numList[num])
+                    numList.splice(num, 1)
+                    sum = numList.reduce((p, n) => p + n.len, 0)
+                    avg = sum / (that.lineLen - a - 1)
+                    break
+
+                }else {
+                    if(sortList[a].length == 0) {
+                        //对应列没有数据将该元素放入，计算和平均数的差值。小于1删除该元素跳出循环，否则将当前index存入暂存器
+                        sortList[a].push(numList[num])
+                        delta = Math.abs(avg - numList[num].len)
+                        if(delta < 1) {
+                            numList.splice(num, 1)
+                            break
+                        }
+                        setInd.push(num)
+
+                    }else {
+                        if(num == numList.length - 1 || delta == numList[num].len) {
+                            //如果是最后一个元素或者数量和差值相等，将其添加进a列，将index存入暂存器并倒序暂存器，从numList中遍历删除暂存器内元素，跳出循环
+                            sortList[a].push(numList[num])
+                            setInd.push(num)
+                            setInd.sort((a, b) => b - a)
+                            setInd.map(item => numList.splice(item, 1))
+                            break
+
+                        }else {
+                            //为方便比较，这里设置了如果数量大于差值，或者暂存器内最后一个index为上一个index，则执行下一个循环
+                            if(numList[num].len > delta || setInd[setInd.length - 1] == +num - 1) continue
+
+                            //对差值和数量进行比较，存入绝对值较小部分，取当前元素len值和旧差值的差为新差值，如果差值小于1则删除numList中对应元素，并跳出循环
+                            if(Math.abs(delta - numList[num].len) > Math.abs(numList[+num - 1].len - delta)) {
+                                sortList[a].push(numList[+num - 1])
+                                setInd.push(+num - 1)
+                                delta = Math.abs(numList[+num - 1].len - delta)
+                            }else {
+                                sortList[a].push(numList[num])
+                                setInd.push(num)
+                                delta = Math.abs(delta - numList[num].len)
+                            }
+                            if(delta < 1) {
+                                setInd.sort((a, b) => b - a)
+                                setInd.map(item => numList.splice(item, 1))
+                                break
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+        // 取出列数组中的index为新数组，结构为[[0],[1,2],[3,4,5], ...]
+        let indexArr = sortList.map(m => m.map(n => n.index))
+
+        indexArr.map((m, i) => {
+            //创建menuLine[ind][i]，原因同上
+            that.menuLine[ind][i] = new Array()
+
+            m.map((n, x) => {
+                that.menuLine[ind][i].push(arr[n])
+            })
+        })
+    }else {
+        for(let i = 0; i < arr.length; i++) {
+            that.menuLine[ind][i] = [arr[i]]
+        }
+    } 
+})
+```
