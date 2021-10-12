@@ -250,16 +250,19 @@ export function userPhone() {
 ```
 
 7. 下载文件流
+> 如果出现乱码需要axios请求资源时添加`responseType: 'blob'`参数
 ```javascript
-const link = document.createElement('a')
-let blob = new Blob([data], { type: 'application/vnd.ms-excel' })
-link.style.display = 'none'
-link.href = URL.createObjectURL(blob)
-link.setAttribute('download', '校友录.xlsx')
-document.body.appendChild(link)
-link.click()
-document.body.removeChild(link)
-window.URL.revokeObjectURL(link.href)
+export function exportFile(file, name, MIME) {
+    let link = document.createElement('a');
+    link.download = name,
+    link.style.display = 'none'
+    let blob = new Blob([file], {type: MIME});
+    link.href = URL.createObjectURL(blob)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(link.href)
+}
 ```
 
 8. 动态规划
